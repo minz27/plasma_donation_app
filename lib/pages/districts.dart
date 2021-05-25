@@ -63,7 +63,12 @@ class _DistrictsPageState extends State<DistrictsPage> {
               itemBuilder: (BuildContext ctx, index) {
                 return Card(
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, '/donors', arguments: {
+                        'districtName': districtList[index].districtName
+                      });
+                      print('success');
+                    },
                     child: Center(
                       child: Text(
                         districtList[index].districtName,
