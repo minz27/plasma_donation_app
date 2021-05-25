@@ -34,6 +34,17 @@ class _HomeState extends State<Home> {
                   },
                 ),
               ),
+              SizedBox(
+                height: 200.0,
+              ),
+              FloatingActionButton.extended(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.add,
+                ),
+                label: Text("Register as Donor"),
+                backgroundColor: Colors.pink[500],
+              ),
               Expanded(
                 child: Align(
                   alignment: FractionalOffset.bottomCenter,
