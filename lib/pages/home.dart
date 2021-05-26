@@ -39,7 +39,9 @@ class _HomeState extends State<Home> {
                 height: 200.0,
               ),
               FloatingActionButton.extended(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, '/register');
+                },
                 icon: Icon(
                   Icons.add,
                 ),

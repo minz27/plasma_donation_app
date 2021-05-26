@@ -24,4 +24,14 @@ class Donor {
         recoveryDate = DateTime.parse(json['recoveryDate']),
         contactNumber = json['contactNumber'].toString(),
         district = json['district'];
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'email': email,
+        'age': age,
+        'bloodGroup': bloodGroup,
+        'recoveryDate': recoveryDate.toString(),
+        'contactNumber': contactNumber,
+        'district': district
+      };
 }
