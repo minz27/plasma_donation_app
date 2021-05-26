@@ -8,19 +8,14 @@ class DonorsPage extends StatefulWidget {
 }
 
 class _DonorsPageState extends State<DonorsPage> {
-  final url =
-      'https://script.googleusercontent.com/macros/echo?user_content_key=ASR3_3FSLkwDp80NGAlhudf_ZaSA6p1rjayOcRQLycIk33hvbJIP0KVgUe7hfrSbG0I0TDLkMzLnUBWtfKQ4nqkeskn1S1Him5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnAlnoNkEky8fmfpqctPkvLH2U5wTUN1g1n3hufLECFv1BbywAQ0nkiF236Kx2TkpXrHcnEbxdnG-PF61ARMjfHHk85xTrbDiedz9Jw9Md8uu&lib=MuznE3EfwupQro66XeoWKJ_nMC58ZlW33';
-  List<Donor> donorsList = [
-    Donor(
-        id: 1,
-        name: 'Mreenav',
-        age: 25,
-        bloodGroup: 'O+',
-        recoveryDate: DateTime.parse('2021-11-11'),
-        contactNumber: 'tel:9706749444',
-        district: 'Kamrup Metro',
-        email: 'mreenav@gmail.com')
-  ];
+  late List<Donor> donorsList;
+  late bool isDonorAvailable;
+
+  void initialiseDonorsList() {
+    Map data = ModalRoute.of(context)!.settings.arguments as Map;
+    donorsList = data["donorsList"];
+    isDonorAvailable = donorsList.isNotEmpty;
+  }
 
   DateTime formatDate(String date) {
     String formattedString = date.substring(
@@ -43,6 +38,8 @@ class _DonorsPageState extends State<DonorsPage> {
 
   @override
   Widget build(BuildContext context) {
+    initialiseDonorsList();
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.purple[900],
@@ -52,25 +49,31 @@ class _DonorsPageState extends State<DonorsPage> {
         ),
         body: Padding(
             padding: const EdgeInsets.fromLTRB(10, 50, 10, 10),
-            child: ListView.builder(
-              itemCount: donorsList.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  child: ListTile(
-                    title: Text('${donorsList[index].name}'),
-                    subtitle:
-                        Text('Blood Group: ${donorsList[index].bloodGroup}'),
-                    trailing: IconButton(
-                      icon: Icon(Icons.call),
-                      color: Colors.green[400],
-                      onPressed: () {
-                        _makingPhoneCall(donorsList[index].contactNumber);
-                      },
-                    ),
-                    isThreeLine: true,
-                  ),
-                );
-              },
-            )));
+            child: isDonorAvailable
+                ? ListView.builder(
+                    itemCount: donorsList.length,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        child: ListTile(
+                          title: Text('${donorsList[index].name}'),
+                          subtitle: Text(
+                              'Blood Group: ${donorsList[index].bloodGroup}'),
+                          trailing: IconButton(
+                            icon: Icon(Icons.call),
+                            color: Colors.green[400],
+                            onPressed: () {
+                              _makingPhoneCall(donorsList[index].contactNumber);
+                            },
+                          ),
+                          isThreeLine: true,
+                        ),
+                      );
+                    },
+                  )
+                : Text(
+                    "We're sorry but no donors are registered in your district right now.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 20),
+                  )));
   }
 }

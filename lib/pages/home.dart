@@ -33,6 +33,7 @@ class _HomeState extends State<Home> {
                     print('Tapped');
                   },
                 ),
+                elevation: 2,
               ),
               SizedBox(
                 height: 200.0,

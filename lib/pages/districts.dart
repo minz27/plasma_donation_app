@@ -64,7 +64,7 @@ class _DistrictsPageState extends State<DistrictsPage> {
                 return Card(
                   child: InkWell(
                     onTap: () {
-                      Navigator.pushNamed(context, '/donors', arguments: {
+                      Navigator.pushNamed(context, '/loading', arguments: {
                         'districtName': districtList[index].districtName
                       });
                       print('success');
@@ -73,9 +73,11 @@ class _DistrictsPageState extends State<DistrictsPage> {
                       child: Text(
                         districtList[index].districtName,
                         style: TextStyle(fontSize: 15),
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),
+                  elevation: 2,
                 );
               }),
         ));
