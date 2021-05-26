@@ -22,6 +22,6 @@ class Donor {
         age = json['age'],
         bloodGroup = json['bloodGroup'],
         recoveryDate = DateTime.parse(json['recoveryDate']),
-        contactNumber = json['contactNumber'],
+        contactNumber = json['contactNumber'].toString(),
         district = json['district'];
 }

@@ -15,7 +15,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
     DonorsList donorsList = DonorsList(district: data["districtName"]);
     print(data["districtName"]);
     await donorsList.findDonors();
-
     Navigator.pushReplacementNamed(context, '/donors',
         arguments: {'donorsList': donorsList.donorsList});
   }

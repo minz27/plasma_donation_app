@@ -36,6 +36,14 @@ class _DonorsPageState extends State<DonorsPage> {
     }
   }
 
+  Future<void> _sendingEmail(url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     initialiseDonorsList();
@@ -54,18 +62,53 @@ class _DonorsPageState extends State<DonorsPage> {
                     itemCount: donorsList.length,
                     itemBuilder: (context, index) {
                       return Card(
-                        child: ListTile(
-                          title: Text('${donorsList[index].name}'),
-                          subtitle: Text(
-                              'Blood Group: ${donorsList[index].bloodGroup}'),
-                          trailing: IconButton(
-                            icon: Icon(Icons.call),
-                            color: Colors.green[400],
-                            onPressed: () {
-                              _makingPhoneCall(donorsList[index].contactNumber);
-                            },
+                        margin: EdgeInsets.fromLTRB(5, 0, 5, 20),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Text(
+                                '${donorsList[index].name}',
+                                style:
+                                    TextStyle(fontSize: 20, letterSpacing: 1),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                'Blood Group: ${donorsList[index].bloodGroup}',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                              Text(
+                                'Age: ${donorsList[index].age}',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.call),
+                                    color: Colors.green[400],
+                                    onPressed: () {
+                                      String formattedNumber = "tel:" +
+                                          donorsList[index].contactNumber;
+                                      _makingPhoneCall(formattedNumber);
+                                    },
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      String formattedMail =
+                                          "mailto:" + donorsList[index].email;
+                                      _sendingEmail(formattedMail);
+                                    },
+                                    icon: Icon(Icons.email),
+                                    color: Colors.pink[500],
+                                  )
+                                ],
+                              )
+                            ],
                           ),
-                          isThreeLine: true,
                         ),
                       );
                     },
