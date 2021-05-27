@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
 class RegistrationForm extends StatefulWidget {
@@ -33,6 +35,130 @@ class _RegistrationFormState extends State<RegistrationForm> {
   Widget _buildEmail() {
     return TextFormField(
       decoration: InputDecoration(labelText: "Email"),
+      keyboardType: TextInputType.emailAddress,
+      validator: (value) {
+        if (value!.isNotEmpty && !EmailValidator.validate(value)) {
+          print(EmailValidator.validate(value));
+          return "Please enter valid email";
+        }
+      },
+      onSaved: (value) {
+        _email = value!;
+      },
+    );
+  }
+
+  Widget _buildContactNumber() {
+    return TextFormField(
+      decoration: InputDecoration(labelText: "Contact Number"),
+      keyboardType: TextInputType.number,
+      validator: (value) {
+        if (value!.isEmpty || value.length != 10) {
+          return "Please enter a valid contact number";
+        }
+      },
+      onSaved: (value) {
+        _contactNumber = value!;
+      },
+    );
+  }
+
+  Widget _buildAge() {
+    return TextFormField(
+      decoration: InputDecoration(labelText: "Age"),
+      keyboardType: TextInputType.number,
+      validator: (value) {
+        if (value!.isEmpty ||
+            (int.parse(value) < 18) ||
+            (int.parse(value) > 65)) {
+          return "Please confirm that you are between 18 and 65 years of age";
+        }
+      },
+      onSaved: (value) {
+        _age = int.parse(value!);
+      },
+    );
+  }
+
+  Widget _buildBloodGroup() {
+    var _bloodGroups = ["A+", "O+", "B+", "AB+", "A-", "O-", "B-", "AB-"];
+    return DropdownButtonFormField(
+        hint: Text("Bloodgroup"),
+        items: _bloodGroups.map((String value) {
+          return DropdownMenuItem<String>(value: value, child: Text(value));
+        }).toList(),
+        onChanged: (value) {
+          setState(() => _bloodGroup = value.toString());
+        },
+        validator: (value) =>
+            value == null ? 'Please select your blood group' : null);
+  }
+
+  Widget _buildDistrict() {
+    List<String> _districtList = [
+      'Baksa',
+      'Barpeta',
+      'Biswanath',
+      'Bongaigaon',
+      'Cachar',
+      'Charaideo',
+      'Chirang',
+      'Darrang',
+      'Dhemaji',
+      'Dhubri',
+      'Dibrugarh',
+      'Dima Hasao',
+      'Goalpara',
+      'Golaghat',
+      'Hailakandi',
+      'Hojai',
+      'Jorhat',
+      'Kamrup',
+      'Kamrup Metropolitan',
+      'Karbi Anglong',
+      'Karimganj',
+      'Kokrajhar',
+      'Lakhimpur',
+      'Majuli',
+      'Morigaon',
+      'Nagaon',
+      'Nalbari',
+      'Sivsagar',
+      'Sonitpur',
+      'South Salamara Mankachar',
+      'Tinsukia',
+      'Udalguri',
+      'West Karbi Anglong'
+    ];
+    return DropdownButtonFormField(
+      hint: Text("Select your District"),
+      items: _districtList.map((String value) {
+        return DropdownMenuItem<String>(value: value, child: Text(value));
+      }).toList(),
+      onChanged: (value) {
+        setState(() => _district = value.toString());
+      },
+      validator: (value) =>
+          value == null ? 'Please select your district' : null,
+    );
+  }
+
+  String _formatDate(date) {
+    var formatter = new DateFormat('MM/dd/yyyy');
+    return formatter.format(date);
+  }
+
+  Widget _buildRecoveryDate() {
+    DateTime _firstDate = DateTime.now().subtract(Duration(days: 90));
+    DateTime _today = DateTime.now();
+    return InputDatePickerFormField(
+      firstDate: _firstDate,
+      lastDate: _today,
+      onDateSaved: (value) => _recoveryDate = value,
+      fieldLabelText: "Date of recovering from COVID-19",
+      errorFormatText: "Please enter date in MM/DD/YYYY format",
+      errorInvalidText:
+          "Please ensure that your date of recovery is between ${_formatDate(_firstDate)} and ${_formatDate(_today)}",
     );
   }
 
@@ -53,18 +179,27 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   children: [
                     _buildName(),
                     _buildEmail(),
-                    _buildName(),
-                    _buildName(),
-                    _buildName(),
-                    // _buildEmail(),
+                    _buildContactNumber(),
+                    _buildAge(),
+                    _buildBloodGroup(),
+                    _buildDistrict(),
+                    _buildRecoveryDate(),
                     SizedBox(
                       height: 50,
                     ),
                     FloatingActionButton.extended(
                       onPressed: () {
-                        print("Beepboop");
-                        if (_formKey.currentState!.validate()) {
+                        if (!_formKey.currentState!.validate()) {
                           return;
+                        } else {
+                          _formKey.currentState!.save();
+                          print("Name $_name");
+                          print("Email $_email");
+                          print("Age $_age");
+                          print("Recover Date $_recoveryDate");
+                          print("$_district");
+                          print("Bloodgroup $_bloodGroup");
+                          print("Contactnumber $_contactNumber");
                         }
                       },
                       icon: Icon(
