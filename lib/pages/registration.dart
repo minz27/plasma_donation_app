@@ -165,6 +165,17 @@ class _RegistrationFormState extends State<RegistrationForm> {
   }
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final snackBarSuccess = SnackBar(
+    content: Text('You are successfully registered!'),
+    backgroundColor: Colors.green,
+  );
+  final snackBarFailure = SnackBar(
+    content: Text('An error occured. Please try again later'),
+    backgroundColor: Colors.red,
+  );
+  final snackBarCurrent = SnackBar(content: Text("Getting you registered.."));
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -195,6 +206,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
                           return;
                         } else {
                           _formKey.currentState!.save();
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(snackBarCurrent);
                           FormController formController = FormController();
                           print(_name.runtimeType);
                           print(_age.runtimeType);
@@ -215,8 +228,12 @@ class _RegistrationFormState extends State<RegistrationForm> {
                               (String response) {
                             print("Response: $response");
                             if (response == FormController.STATUS_SUCCESS) {
-                              // Feedback is saved succesfully in Google Sheets.
+                              ScaffoldMessenger.of(context).clearSnackBars();
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBarSuccess);
+                              // Data is saved succesfully in Google Sheets.
                               print("SUCCEES");
+                              Navigator.pop(context);
                             } else {
                               // Error Occurred while saving data in Google Sheets.
                               print("Error Occurred!");

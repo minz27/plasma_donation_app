@@ -98,9 +98,16 @@ class _DonorsPageState extends State<DonorsPage> {
                                   ),
                                   IconButton(
                                     onPressed: () {
-                                      String formattedMail =
-                                          "mailto:" + donorsList[index].email;
-                                      _sendingEmail(formattedMail);
+                                      if (donorsList[index].email.isNotEmpty) {
+                                        String formattedMail =
+                                            "mailto:" + donorsList[index].email;
+                                        _sendingEmail(formattedMail);
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text(
+                                                    "The donor has not provided an email addres")));
+                                      }
                                     },
                                     icon: Icon(Icons.email),
                                     color: Colors.pink[500],
