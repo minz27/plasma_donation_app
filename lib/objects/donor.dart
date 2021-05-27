@@ -28,10 +28,10 @@ class Donor {
   Map<String, dynamic> toJson() => {
         'name': name,
         'email': email,
-        'age': age,
+        'age': age.toString(),
         'bloodGroup': bloodGroup,
         'recoveryDate': recoveryDate.toString(),
-        'contactNumber': contactNumber,
+        'contactNumber': contactNumber.toString(),
         'district': district
       };
 }

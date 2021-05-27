@@ -7,7 +7,7 @@ import 'package:plasma_donor_finder/objects/donor.dart';
 class FormController {
   // Google App Script Web URL.
   final url = Uri.parse(
-      'https://script.googleusercontent.com/macros/echo?user_content_key=3qU_CvrBwOOgqz-PP5KWDbCdx9RCDbbf4cYOqOWii-Q4rssPckBKRQB_ahU-vYYa_JdRK3dVJ6otBL4MffB8BUc6fL7-v86Pm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnCC_lsBIc2GSl4V0xv7OLWkYbXqZtsy8BCC_J0UCegVlB1VzxCPle6CXT_SFlMUW0zGeASrE4uqNp9nk2bNG35C1TUizkcjB_dz9Jw9Md8uu&lib=MuznE3EfwupQro66XeoWKJ_nMC58ZlW33');
+      'https://script.google.com/macros/s/AKfycbyj2jpcOuQAKsSgaPWo-nEchc5MKlp7yxKSYCqCiimkPcDNKlQKJeEm1kx_G-_R7pPM/exec');
 
   // Success Status Message
   static const STATUS_SUCCESS = "SUCCESS";

@@ -1,6 +1,8 @@
 import 'package:intl/intl.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:plasma_donor_finder/objects/donor.dart';
+import 'package:plasma_donor_finder/services/form_controller.dart';
 
 class RegistrationForm extends StatefulWidget {
   @override
@@ -9,7 +11,7 @@ class RegistrationForm extends StatefulWidget {
 
 class _RegistrationFormState extends State<RegistrationForm> {
   late String _name;
-  late String _email;
+  String _email = "";
   late String _contactNumber;
   late int _age;
   late String _bloodGroup;
@@ -193,13 +195,33 @@ class _RegistrationFormState extends State<RegistrationForm> {
                           return;
                         } else {
                           _formKey.currentState!.save();
-                          print("Name $_name");
-                          print("Email $_email");
-                          print("Age $_age");
-                          print("Recover Date $_recoveryDate");
-                          print("$_district");
-                          print("Bloodgroup $_bloodGroup");
-                          print("Contactnumber $_contactNumber");
+                          FormController formController = FormController();
+                          print(_name.runtimeType);
+                          print(_age.runtimeType);
+                          print(_email.runtimeType);
+                          print(_bloodGroup.runtimeType);
+                          print(_recoveryDate.runtimeType);
+                          print(_contactNumber.runtimeType);
+                          print(_district.runtimeType);
+                          Donor donorDetails = Donor(
+                              name: _name,
+                              age: _age,
+                              bloodGroup: _bloodGroup,
+                              recoveryDate: _recoveryDate,
+                              contactNumber: _contactNumber.toString(),
+                              district: _district,
+                              email: _email);
+                          formController.submitForm(donorDetails,
+                              (String response) {
+                            print("Response: $response");
+                            if (response == FormController.STATUS_SUCCESS) {
+                              // Feedback is saved succesfully in Google Sheets.
+                              print("SUCCEES");
+                            } else {
+                              // Error Occurred while saving data in Google Sheets.
+                              print("Error Occurred!");
+                            }
+                          });
                         }
                       },
                       icon: Icon(
