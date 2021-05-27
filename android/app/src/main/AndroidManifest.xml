@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.plasma_donor_finder">
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:label="Plasma Donor Finder Assam"
         android:icon="@mipmap/launcher_icon">
