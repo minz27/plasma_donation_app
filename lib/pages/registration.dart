@@ -15,14 +15,13 @@ class _RegistrationFormState extends State<RegistrationForm> {
   late String _contactNumber;
   late int _age;
   late String _bloodGroup;
-  late DateTime _recoveryDate;
+  DateTime _recoveryDate = DateTime.now();
   late String _district;
 
   Widget _buildName() {
     return TextFormField(
-      decoration: InputDecoration(
-        labelText: "Name",
-      ),
+      decoration:
+          InputDecoration(labelText: "Name *", icon: Icon(Icons.text_fields)),
       validator: (value) {
         if (value!.isEmpty) {
           return "Name is required";
@@ -36,7 +35,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
 
   Widget _buildEmail() {
     return TextFormField(
-      decoration: InputDecoration(labelText: "Email"),
+      decoration: InputDecoration(labelText: "Email", icon: Icon(Icons.email)),
       keyboardType: TextInputType.emailAddress,
       validator: (value) {
         if (value!.isNotEmpty && !EmailValidator.validate(value)) {
@@ -52,7 +51,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
 
   Widget _buildContactNumber() {
     return TextFormField(
-      decoration: InputDecoration(labelText: "Contact Number"),
+      decoration: InputDecoration(
+          labelText: "Contact Number *", icon: Icon(Icons.phone)),
       keyboardType: TextInputType.number,
       validator: (value) {
         if (value!.isEmpty || value.length != 10) {
@@ -67,7 +67,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
 
   Widget _buildAge() {
     return TextFormField(
-      decoration: InputDecoration(labelText: "Age"),
+      decoration:
+          InputDecoration(labelText: "Age *", icon: Icon(Icons.text_fields)),
       keyboardType: TextInputType.number,
       validator: (value) {
         if (value!.isEmpty ||
@@ -85,7 +86,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
   Widget _buildBloodGroup() {
     var _bloodGroups = ["A+", "O+", "B+", "AB+", "A-", "O-", "B-", "AB-"];
     return DropdownButtonFormField(
-        hint: Text("Bloodgroup"),
+        hint: Text("Blood Group *"),
         items: _bloodGroups.map((String value) {
           return DropdownMenuItem<String>(value: value, child: Text(value));
         }).toList(),
@@ -133,7 +134,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
       'West Karbi Anglong'
     ];
     return DropdownButtonFormField(
-      hint: Text("Select your District"),
+      hint: Text("Select your District *"),
       items: _districtList.map((String value) {
         return DropdownMenuItem<String>(value: value, child: Text(value));
       }).toList(),
@@ -145,22 +146,41 @@ class _RegistrationFormState extends State<RegistrationForm> {
     );
   }
 
-  String _formatDate(date) {
-    var formatter = new DateFormat('MM/dd/yyyy');
-    return formatter.format(date);
+  TextEditingController _textEditingController = TextEditingController();
+
+  Future<void> _selectDate(BuildContext context) async {
+    DateTime _firstDate = DateTime.now().subtract(Duration(days: 90));
+    DateTime _today = DateTime.now();
+    DateTime? picked = await showDatePicker(
+        helpText: "Date of recovery from COVID-19",
+        context: context,
+        initialDate: _today,
+        firstDate: _firstDate,
+        lastDate: _today);
+    setState(() {
+      if (null != picked) {
+        _recoveryDate = picked;
+      } else {
+        _recoveryDate = _today;
+      }
+    });
   }
 
   Widget _buildRecoveryDate() {
-    DateTime _firstDate = DateTime.now().subtract(Duration(days: 90));
-    DateTime _today = DateTime.now();
-    return InputDatePickerFormField(
-      firstDate: _firstDate,
-      lastDate: _today,
-      onDateSaved: (value) => _recoveryDate = value,
-      fieldLabelText: "Date of recovering from COVID-19",
-      errorFormatText: "Please enter date in MM/DD/YYYY format",
-      errorInvalidText:
-          "Please ensure that your date of recovery is between ${_formatDate(_firstDate)} and ${_formatDate(_today)}",
+    return TextFormField(
+      decoration: InputDecoration(
+          labelText: "Date of Recovery from COVID-19",
+          icon: Icon(Icons.calendar_today)),
+      controller: _textEditingController,
+      onTap: () async {
+        // Below line stops keyboard from appearing
+        FocusScope.of(context).requestFocus(new FocusNode());
+        // Show Date Picker Here
+        await _selectDate(context);
+        _textEditingController.text =
+            DateFormat('yyyy/MM/dd').format(_recoveryDate);
+        //setState(() {});
+      },
     );
   }
 
@@ -194,9 +214,12 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     _buildEmail(),
                     _buildContactNumber(),
                     _buildAge(),
+                    _buildRecoveryDate(),
+                    SizedBox(
+                      height: 30,
+                    ),
                     _buildBloodGroup(),
                     _buildDistrict(),
-                    _buildRecoveryDate(),
                     SizedBox(
                       height: 50,
                     ),
