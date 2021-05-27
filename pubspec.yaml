@@ -29,6 +29,7 @@ dependencies:
   email_validator: '^2.0.1'
   intl: ^0.17.0
   date_field: ^2.0.1
+  flutter_launcher_icons: "^0.8.0"
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -40,6 +41,10 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/blood.png"
 
 # The following section is specific to Flutter.
 flutter:
